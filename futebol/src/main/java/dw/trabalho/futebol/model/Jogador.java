@@ -1,13 +1,13 @@
 package dw.trabalho.futebol.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -16,8 +16,6 @@ import jakarta.persistence.Table;
 public class Jogador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToMany
-    @JoinColumn(name = "jogador")
     private Long cod_jogador;
     
     @Column(nullable = false, length = 60)
@@ -28,11 +26,14 @@ public class Jogador {
     
     @Column(nullable = false)
     private Date datanasc;
+
+    @OneToMany
+    private List<Pagamento> pagamentos;
     
     public long getCod_jogador() {
         return cod_jogador;
     }
-    public void setCod_jogador(long cod_jogador) {
+    public void setCod_jogador(Long cod_jogador) {
         this.cod_jogador = cod_jogador;
     }
     public String getNome() {
@@ -52,5 +53,11 @@ public class Jogador {
     }
     public void setDatanasc(Date datanasc) {
         this.datanasc = datanasc;
+    }
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
     }
 }
