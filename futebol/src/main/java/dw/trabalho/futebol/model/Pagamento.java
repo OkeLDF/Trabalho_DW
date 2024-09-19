@@ -25,8 +25,7 @@ public class Pagamento {
     @Column(nullable = false)
     private Double valor;
 
-    @Column(nullable = false)
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "cod_jogador", nullable = false)
     private Jogador jogador;
 

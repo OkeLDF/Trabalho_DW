@@ -27,7 +27,7 @@ public class Jogador {
     @Column(nullable = false)
     private Date datanasc;
 
-    @OneToMany
+    @OneToMany(mappedBy = "jogador")
     private List<Pagamento> pagamentos;
     
     public long getCod_jogador() {
