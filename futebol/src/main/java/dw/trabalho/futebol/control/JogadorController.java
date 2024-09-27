@@ -39,7 +39,7 @@ public class JogadorController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(jogadores, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
