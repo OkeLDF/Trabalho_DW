@@ -29,6 +29,15 @@ public class Jogador {
 
     @OneToMany(mappedBy = "jogador")
     private List<Pagamento> pagamentos;
+
+    public Jogador(){}
+
+    public Jogador(String nome, String email, Date datanasc) {
+        this.nome = nome;
+        this.email = email;
+        this.datanasc = datanasc;
+        this.pagamentos = null;
+    }
     
     public long getCod_jogador() {
         return cod_jogador;
