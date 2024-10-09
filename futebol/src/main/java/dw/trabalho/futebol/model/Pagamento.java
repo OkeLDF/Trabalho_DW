@@ -24,11 +24,11 @@ public class Pagamento {
 
     @Column(nullable = false)
     private Double valor;
-
+    
     @ManyToOne()
     @JoinColumn(name = "cod_jogador", nullable = false)
     private Jogador jogador;
-
+    
     public Pagamento(){}
 
     public Pagamento(Integer ano, Integer mes, Double valor, Jogador jogador){

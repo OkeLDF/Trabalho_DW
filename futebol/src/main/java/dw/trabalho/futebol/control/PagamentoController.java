@@ -62,26 +62,41 @@ public class PagamentoController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Pagamento> createPagamento(@RequestBody Pagamento pagamento) {
         try {
-            if (pagamento.getJogador() == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+            Optional<Jogador> jogador;
 
-            Optional<Jogador> jogador = jogadorRep.findById(pagamento.getJogador().getCod_jogador());
+            if (pagamento.getJogador().getCod_jogador() == null) {
+                
+                if(pagamento.getJogador().getNome() == null){
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+
+                List<Jogador> jogadorList = jogadorRep.findByNomeContaining(pagamento.getJogador().getNome());
+                
+                if(jogadorList.isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+
+                jogador = Optional.of(jogadorList.get(0));
+            }
+            else {
+                jogador = jogadorRep.findById(pagamento.getJogador().getCod_jogador());
+            }
+            
             if (jogador.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            return new ResponseEntity<>(rep.save(
-                new Pagamento(
-                    pagamento.getAno(),
-                    pagamento.getMes(),
-                    pagamento.getValor(),
-                    jogador.get()
-                )),
-                HttpStatus.CREATED);
+            Pagamento novoPagamento = new Pagamento(
+                pagamento.getAno(),
+                pagamento.getMes(),
+                pagamento.getValor(),
+                jogador.get()
+            );
+
+            return new ResponseEntity<>(rep.save(novoPagamento), HttpStatus.CREATED);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,24 +107,29 @@ public class PagamentoController {
     public ResponseEntity<Pagamento> updatePagamento(@PathVariable("id") long id, @RequestBody Pagamento pagamento) {
         Optional<Pagamento> pagamentoAntigo = rep.findById(id);
 
-        if (pagamentoAntigo.isPresent()) {
-            Pagamento novoPagamento = pagamentoAntigo.get();
-            novoPagamento.setAno(pagamento.getAno());
-            novoPagamento.setMes(pagamento.getMes());
-            novoPagamento.setValor(pagamento.getValor());
+        try {
+            if (pagamentoAntigo.isPresent()) {
+                Pagamento novoPagamento = pagamentoAntigo.get();
+                novoPagamento.setAno(pagamento.getAno());
+                novoPagamento.setMes(pagamento.getMes());
+                novoPagamento.setValor(pagamento.getValor());
 
-            if (pagamento.getJogador() != null && pagamento.getJogador().getCod_jogador() != null) {
-                Optional<Jogador> jogadorData = jogadorRep.findById(pagamento.getJogador().getCod_jogador());
-                if (jogadorData.isPresent()) {
-                    novoPagamento.setJogador(jogadorData.get());
-                } else {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                if (pagamento.getJogador() != null) {
+                    Optional<Jogador> jogador = jogadorRep.findById(pagamento.getJogador().getCod_jogador());
+                    if (jogador.isPresent()) {
+                        novoPagamento.setJogador(jogador.get());
+                    } else {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
                 }
-            }
+                return new ResponseEntity<>(rep.save(novoPagamento), HttpStatus.OK);
 
-            return new ResponseEntity<>(rep.save(novoPagamento), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,6 +141,16 @@ public class PagamentoController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<HttpStatus> deletePagamentos() {
+        try {
+            rep.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

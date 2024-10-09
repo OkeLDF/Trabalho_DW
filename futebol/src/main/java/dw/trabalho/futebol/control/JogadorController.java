@@ -26,7 +26,7 @@ public class JogadorController {
     @Autowired
     JogadorRepository rep;
 
-    // http://localhost:8000/futebol
+    // http://localhost:8000/futebol/jogador
     @GetMapping("/")
     public ResponseEntity<List<Jogador>> getAllJogadores(@RequestParam(required = false) String nome){
         try {
@@ -75,7 +75,8 @@ public class JogadorController {
                 )),
                 HttpStatus.CREATED);
                 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -109,6 +110,16 @@ public class JogadorController {
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<HttpStatus> deleteJogador() {
+        try {
+            rep.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

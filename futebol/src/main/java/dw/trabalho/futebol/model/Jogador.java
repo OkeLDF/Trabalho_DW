@@ -10,9 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "jogador")
+@Table(name = "jogador", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
 public class Jogador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +28,8 @@ public class Jogador {
     @Column(nullable = false)
     private Date datanasc;
 
-    @OneToMany(mappedBy = "jogador")
-    private List<Pagamento> pagamentos;
+    // @OneToMany(mappedBy = "jogador")
+    // private List<Pagamento> pagamentos;
 
     public Jogador(){}
 
@@ -36,10 +37,18 @@ public class Jogador {
         this.nome = nome;
         this.email = email;
         this.datanasc = datanasc;
-        this.pagamentos = null;
+        // this.pagamentos = null;
+    }
+
+    public Jogador(Long cod_jogador) {
+        this.cod_jogador = cod_jogador;
+    }
+
+    public Jogador(String nome) {
+        this.nome = nome;
     }
     
-    public long getCod_jogador() {
+    public Long getCod_jogador() {
         return cod_jogador;
     }
     public void setCod_jogador(Long cod_jogador) {
@@ -63,10 +72,10 @@ public class Jogador {
     public void setDatanasc(Date datanasc) {
         this.datanasc = datanasc;
     }
-    public List<Pagamento> getPagamentos() {
-        return pagamentos;
-    }
-    public void setPagamentos(List<Pagamento> pagamentos) {
-        this.pagamentos = pagamentos;
-    }
+//     public List<Pagamento> getPagamentos() {
+//         return pagamentos;
+//     }
+//     public void setPagamentos(List<Pagamento> pagamentos) {
+//         this.pagamentos = pagamentos;
+//     }
 }
