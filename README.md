@@ -75,7 +75,8 @@ Desenvolvido pelos alunos Kainã, Otávio e Wendell para a disciplina de Desenvo
 ### 4. Atualizar Jogador
 
 - **PUT** `/jogador/{id}`
-    - Descrição: Atualiza os dados de um jogador existente.
+    - Descrição: Atualiza os dados de um jogador existente 
+    - Observação: Obrigatório passar todos os campos para atualizar o jogador
     - Parâmetro: `id` (long)
     - Corpo da requisição (JSON):
     
@@ -89,8 +90,23 @@ Desenvolvido pelos alunos Kainã, Otávio e Wendell para a disciplina de Desenvo
         - `200 OK`: Jogador atualizado com sucesso.
         - `404 NOT FOUND`: Jogador não encontrado.
         - `500 INTERNAL SERVER ERROR`: Erro ao processar a requisição.
+### 5. Atualizar Jogador
 
-### 5. Deletar Jogador por ID
+- **PATCH** `/jogador/{id}`
+    - Descrição: Atualiza parcialmente os dados de um jogador existente.
+    - Observação: Atualiza os dados apenas com os campos passados no corpo da requisição
+    - Parâmetro: `id` (long)
+    - Corpo da requisição (JSON):
+    
+  		    {
+	  		    "nome": "Leonardo",   
+  		    }    	    
+    - Exemplo de requisição: `PATCH http://localhost:8000/futebol/jogador/1`
+    - Respostas:
+        - `200 OK`: Jogador atualizado com sucesso.
+        - `404 NOT FOUND`: Jogador não encontrado.
+        - `500 INTERNAL SERVER ERROR`: Erro ao processar a requisição.
+### 6. Deletar Jogador por ID
 
 - **DELETE** `/jogador/{id}`
     - Descrição: Deleta um jogador com base no seu ID.
@@ -132,7 +148,7 @@ Desenvolvido pelos alunos Kainã, Otávio e Wendell para a disciplina de Desenvo
                 
 	      {   
 	        "ano": 2034,   
-	        "mes": "Dezembro",   
+	        "mes": 12,   
 	        "valor": 1200.0,   
 	        "jogador": 
             {
@@ -158,7 +174,7 @@ Desenvolvido pelos alunos Kainã, Otávio e Wendell para a disciplina de Desenvo
         
 	      {   
 	        "ano": 2036,   
-	        "mes": "Dezembro",   
+	        "mes": 12,   
 	        "valor": 1800.0,   
 	        "jogador": 
             {
