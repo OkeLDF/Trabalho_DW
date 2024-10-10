@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,21 +29,20 @@ public class JogadorController {
 
     // http://localhost:8000/futebol/jogador
     @GetMapping("/")
-    public ResponseEntity<List<Jogador>> getAllJogadores(@RequestParam(required = false) String nome){
+    public ResponseEntity<List<Jogador>> getAllJogadores(@RequestParam(required = false) String nome) {
         try {
             List<Jogador> lj = new ArrayList<Jogador>();
-            if(nome==null){
+            if (nome == null) {
                 rep.findAll().forEach(lj::add);
-            }
-            else {
-                rep.findByNomeContaining(nome).forEach(lj::add);
+            } else {
+                rep.findByNome(nome).forEach(lj::add);
             }
 
-            if(lj.isEmpty()){
+            if (lj.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-                return new ResponseEntity<>(lj, HttpStatus.OK);
+            return new ResponseEntity<>(lj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,15 +68,13 @@ public class JogadorController {
     public ResponseEntity<Jogador> createJogador(@RequestBody Jogador jogador) {
         try {
             return new ResponseEntity<>(rep.save(
-                new Jogador(
-                    jogador.getNome(),
-                    jogador.getEmail(),
-                    jogador.getDatanasc()
-                )),
-                HttpStatus.CREATED);
-                
-        }
-        catch (Exception e) {
+                    new Jogador(
+                            jogador.getNome(),
+                            jogador.getEmail(),
+                            jogador.getDatanasc())),
+                    HttpStatus.CREATED);
+
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +83,7 @@ public class JogadorController {
     public ResponseEntity<Jogador> updateJogador(@PathVariable("id") long id, @RequestBody Jogador jogador) {
         Optional<Jogador> jogadorAntigo = rep.findById(id);
 
-        try{
+        try {
             if (jogadorAntigo.isPresent()) {
                 Jogador novoJogador = jogadorAntigo.get();
                 novoJogador.setNome(jogador.getNome());
@@ -95,8 +93,31 @@ public class JogadorController {
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        catch(Exception e){
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Jogador> patchJogador(@PathVariable("id") long id, @RequestBody Jogador jogador) {
+        Optional<Jogador> jogadorAntigo = rep.findById(id);
+        try {
+            if (jogadorAntigo.isPresent()) {
+                Jogador novoJogador = jogadorAntigo.get();
+                if(jogador.getDatanasc() != null){
+                    novoJogador.setDatanasc(jogador.getDatanasc());
+                }
+                if(jogador.getNome()!= null){
+                    novoJogador.setNome(jogador.getNome());
+                }
+                if(jogador.getEmail()!= null){
+                    novoJogador.setEmail(jogador.getEmail());
+                }
+                return new ResponseEntity<>(rep.save(novoJogador), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -104,12 +125,12 @@ public class JogadorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteJogador(@PathVariable("id") long id) {
         try {
-            if(rep.findById(id).isPresent()){
+            if (rep.findById(id).isPresent()) {
                 rep.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            
+
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
