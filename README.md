@@ -1,4 +1,5 @@
 
+
   
 # Projeto de Gerenciamento de Jogadores e Pagamentos ⚽
 
@@ -144,6 +145,7 @@ Desenvolvido pelos alunos Kainã, Otávio e Wendell para a disciplina de Desenvo
 
 - **POST** `/pagamento/`
     - Descrição: Cria um novo pagamento para um jogador.
+    - Opcional: Possível usar o ID do jogador ou e-mail.
     - Corpo da requisição (JSON):
                 
 	      {   
