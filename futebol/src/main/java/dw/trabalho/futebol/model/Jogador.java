@@ -1,6 +1,7 @@
 package dw.trabalho.futebol.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "jogador", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
+@Table(name = "jogador", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Jogador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +27,14 @@ public class Jogador {
     private String email;
     
     @Column(nullable = false)
-    private Date datanasc;
+    private LocalDate datanasc;
 
     // @OneToMany(mappedBy = "jogador")
     // private List<Pagamento> pagamentos;
 
     public Jogador(){}
 
-    public Jogador(String nome, String email, Date datanasc) {
+    public Jogador(String nome, String email, LocalDate datanasc) {
         this.nome = nome;
         this.email = email;
         this.datanasc = datanasc;
@@ -66,10 +67,10 @@ public class Jogador {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Date getDatanasc() {
+    public LocalDate getDatanasc() {
         return datanasc;
     }
-    public void setDatanasc(Date datanasc) {
+    public void setDatanasc(LocalDate datanasc) {
         this.datanasc = datanasc;
     }
 //     public List<Pagamento> getPagamentos() {

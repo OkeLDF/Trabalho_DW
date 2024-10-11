@@ -8,4 +8,6 @@ import dw.trabalho.futebol.model.Jogador;
 
 public interface JogadorRepository extends JpaRepository<Jogador, Long>{
     List<Jogador> findByNomeContaining(String nome);
+    List<Jogador> findByNome(String nome);
+    List<Jogador> findByEmail(String email);
 }
