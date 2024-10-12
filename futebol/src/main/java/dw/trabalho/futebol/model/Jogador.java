@@ -4,8 +4,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +33,10 @@ public class Jogador {
     @Column(nullable = false)
     private LocalDate datanasc;
 
-    // @OneToMany(mappedBy = "jogador")
-    // private List<Pagamento> pagamentos;
+
+     @OneToMany(mappedBy = "jogador",cascade = CascadeType.ALL)
+     @JsonManagedReference
+     private List<Pagamento> pagamentos;
 
     public Jogador(){}
 
@@ -40,6 +46,14 @@ public class Jogador {
         this.datanasc = datanasc;
         // this.pagamentos = null;
     }
+
+    public Jogador(String nome, String email, LocalDate datanasc,List<Pagamento> pagamentos) {
+        this.nome = nome;
+        this.email = email;
+        this.datanasc = datanasc;
+        this.pagamentos = pagamentos;
+    }
+
 
     public Jogador(Long cod_jogador) {
         this.cod_jogador = cod_jogador;
@@ -73,10 +87,32 @@ public class Jogador {
     public void setDatanasc(LocalDate datanasc) {
         this.datanasc = datanasc;
     }
-//     public List<Pagamento> getPagamentos() {
-//         return pagamentos;
-//     }
-//     public void setPagamentos(List<Pagamento> pagamentos) {
-//         this.pagamentos = pagamentos;
-//     }
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
+    }
+
+    public void getPagamento(Pagamento pagamento){
+        if(pagamentos!= null){
+            pagamentos = List.of(pagamento);
+        }
+    }
+
+    public void addPagamento(Pagamento pagamento){
+        this.pagamentos.add(pagamento);
+        pagamento.setJogador(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Jogador{" +
+                "cod_jogador=" + cod_jogador +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", datanasc=" + datanasc +
+                ", pagamentos=" + pagamentos +
+                '}';
+    }
 }

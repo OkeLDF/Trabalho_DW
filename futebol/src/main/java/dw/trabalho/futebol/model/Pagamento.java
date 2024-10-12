@@ -1,7 +1,10 @@
 package dw.trabalho.futebol.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,8 +28,9 @@ public class Pagamento {
     @Column(nullable = false)
     private Double valor;
     
-    @ManyToOne()
-    @JoinColumn(name = "cod_jogador", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JoinColumn(name = "cod_jogador",nullable = false)
     private Jogador jogador;
     
     public Pagamento(){}

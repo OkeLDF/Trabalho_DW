@@ -39,7 +39,7 @@ public class JogadorController {
             }
 
             if (lj.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
             return new ResponseEntity<>(lj, HttpStatus.OK);
@@ -67,11 +67,10 @@ public class JogadorController {
     @PostMapping("/")
     public ResponseEntity<Jogador> createJogador(@RequestBody Jogador jogador) {
         try {
+            System.out.println(jogador);
             return new ResponseEntity<>(rep.save(
-                    new Jogador(
-                            jogador.getNome(),
-                            jogador.getEmail(),
-                            jogador.getDatanasc())),
+                    jogador
+                            ),
                     HttpStatus.CREATED);
 
         } catch (Exception e) {
@@ -104,13 +103,13 @@ public class JogadorController {
         try {
             if (jogadorAntigo.isPresent()) {
                 Jogador novoJogador = jogadorAntigo.get();
-                if(jogador.getDatanasc() != null){
+                if (jogador.getDatanasc() != null) {
                     novoJogador.setDatanasc(jogador.getDatanasc());
                 }
-                if(jogador.getNome()!= null){
+                if (jogador.getNome() != null) {
                     novoJogador.setNome(jogador.getNome());
                 }
-                if(jogador.getEmail()!= null){
+                if (jogador.getEmail() != null) {
                     novoJogador.setEmail(jogador.getEmail());
                 }
                 return new ResponseEntity<>(rep.save(novoJogador), HttpStatus.OK);
