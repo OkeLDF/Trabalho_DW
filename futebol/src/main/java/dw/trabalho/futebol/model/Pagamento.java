@@ -1,6 +1,9 @@
 package dw.trabalho.futebol.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pagamento")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class,property = "cod_pagamento")
 public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +32,8 @@ public class Pagamento {
     @Column(nullable = false)
     private Double valor;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    // @JsonBackReference
     @JoinColumn(name = "cod_jogador",nullable = false)
     private Jogador jogador;
     

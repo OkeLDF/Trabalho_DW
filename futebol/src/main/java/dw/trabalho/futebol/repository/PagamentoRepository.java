@@ -9,4 +9,5 @@ import dw.trabalho.futebol.model.Pagamento;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
     List<Pagamento> findByJogador(Jogador jogador);
+
 }

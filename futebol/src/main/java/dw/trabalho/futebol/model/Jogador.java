@@ -4,7 +4,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +22,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class,property = "cod_jogador")
 @Table(name = "jogador", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Jogador {
     @Id
@@ -35,7 +40,8 @@ public class Jogador {
 
 
      @OneToMany(mappedBy = "jogador",cascade = CascadeType.ALL)
-     @JsonManagedReference
+    //  @JsonManagedReference
+    //  @JsonIgnore
      private List<Pagamento> pagamentos;
 
     public Jogador(){}
